@@ -1,15 +1,39 @@
-NAME = sudoku
+NAME=sudoku
+CC=gcc 
+CPPFLAGS=-Wall -Wextra -Werror
+FILES = add_next.c\
+		check_all.c\
+		check_horizontally.c\
+		check_square.c\
+		check_vertically.c\
+		check.c\
+		copy_board.c\
+		create_board.c\
+		create_list.c\
+		del_one_elem_of_list.c\
+		delete_list.c\
+		find_answer.c\
+		find_opts.c\
+		main.c\
+		print_board.c
+OBJECTS = $(FILES:.c=.o)
+FILESDIR=$(addprefix srcs/, $(FILES))
+OBJSDIR=$(addprefix srcs/, $(OBJECTS))
 
-all: $(NAME)
 
-$(NAME):
-	gcc -c -Wall -Wextra -Werror main.c
-	gcc -Wall -Wextra -Werror main.o -o $(NAME)
+all : $(NAME)
 
-clean:
-	/bin/rm main.o
+$(NAME) : $(OBJSDIR)
+	$(CC) -c $(FILESDIR)
+	$(CC) $(OBJSDIR) -o $(NAME)
 
-fclean:
-	/bin/rm $(NAME)
+clean :
+	rm -f $(OBJSDIR)
+	rm -f $(OBJECTS)
 
-re: fclean all
+fclean: clean
+	rm -f $(NAME)
+
+re : fclean all
+
+.PHONY : fclean clean
