@@ -17,19 +17,16 @@ FILES = add_next.c\
 		main.c\
 		print_board.c
 OBJECTS = $(FILES:.c=.o)
-FILESDIR=$(addprefix srcs/, $(FILES))
 OBJSDIR=$(addprefix srcs/, $(OBJECTS))
 
 
 all : $(NAME)
 
 $(NAME) : $(OBJSDIR)
-	$(CC) -c $(FILESDIR)
 	$(CC) $(OBJSDIR) -o $(NAME)
 
 clean :
 	rm -f $(OBJSDIR)
-	rm -f $(OBJECTS)
 
 fclean: clean
 	rm -f $(NAME)

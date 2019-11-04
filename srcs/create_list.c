@@ -5,7 +5,7 @@ su_list *create_list(size_t i, size_t j, int *opts, int count_of_opts)
 	su_list *new;
 
 	new = NULL;
-	if (i >= 0 && i <= 9 && j >= 0 && j <= 9)
+	if (i <= 9 && j <= 9)
 	{
 		if (!(new = (su_list *)malloc(sizeof(su_list))))
 		{
