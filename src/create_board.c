@@ -1,6 +1,12 @@
 #include "sudoku.h"
 
-void create_board(int board[9][9], char **argv)
+static void	ft_error(char *message)
+{
+	printf("%s\n", message);
+	exit(EXIT_FAILURE);
+}
+
+void		create_board(int board[9][9], char **argv)
 {
 	size_t i;
 	size_t j;
@@ -9,10 +15,7 @@ void create_board(int board[9][9], char **argv)
 	while (i < 9)
 	{
 		if (strlen(argv[i + 1]) != 9 || !argv[i + 1])
-		{
-			printf("%s", "invalid data\n");
-			exit(EXIT_FAILURE);
-		}
+			ft_error("invalid data!");
 		j = 0;
 		while (j < 9)
 		{
@@ -21,17 +24,11 @@ void create_board(int board[9][9], char **argv)
 			else if (argv[i + 1][j] == '.')
 				board[i][j] = 0;
 			else
-			{
-				printf("%s", "invalid data\n");
-				exit(EXIT_FAILURE);
-			}
+				ft_error("invalid data!");
 			j++;
 		}
 		i++;
 	}
 	if (!check_all(board))
-	{
-		printf("%s", "invalid data\n");
-		exit(EXIT_FAILURE);
-	}
+		ft_error("invalid data!");
 }
