@@ -1,20 +1,10 @@
 C=gcc 
-FLAGS=-Wall -Wextra -Werror
-FILES=add_next.c\
-check_all.c\
-check_horizontally.c\
-check_square.c\
-check_vertically.c\
-check.c\
-copy_board.c\
-create_board.c\
-create_list.c\
-del_one_elem_of_list.c\
-delete_list.c\
-find_answer.c\
-find_opts.c\
-main.c\
-print_board.c
+FLAGS=-Wall -Wextra -Werror -g
+FILES=ft_boardfuncs.c\
+ft_checkfuncs.c\
+ft_findfuncs.c\
+ft_lstfuncs.c\
+main.c
 DIR_S=src
 DIR_O=temp
 HEADER=incl
@@ -24,20 +14,18 @@ OBJECTS=$(addprefix $(DIR_O)/, $(FILES:.c=.o))
 
 all : $(NAME)
 
-$(NAME): $(DIR_O) $(OBJECTS)
-	$(C) $(FLAGS) $(OBJECTS) -o $(NAME)
-
-$(DIR_O):
-	mkdir -p $(DIR_O)
+$(NAME): $(OBJECTS)
+	@$(C) $(FLAGS) $(OBJECTS) -o $(NAME)
 
 $(DIR_O)/%.o: $(DIR_S)/%.c
-	$(C) $(FLAGS) -I$(HEADER) -c $< -o $@
+	@mkdir -p $(DIR_O)
+	@$(C) $(FLAGS) -I$(HEADER) -c $< -o $@
 
 clean:
-	rm -rf $(OBJECTS)
+	@rm -rf $(DIR_O)
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
 
