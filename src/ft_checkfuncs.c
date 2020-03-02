@@ -1,6 +1,6 @@
 #include "sudoku.h"
 
-static int	ft_check_horizontally(size_t i, int **board)
+static int	ft_check_horizontally(size_t i, t_cell **board)
 {
 	size_t count = 0;
 
@@ -9,7 +9,7 @@ static int	ft_check_horizontally(size_t i, int **board)
 		count = 0;
 		for (size_t j = 0; j < 9; j++)
 		{
-			if (board[i][j] == target)
+			if (board[i][j].num == target)
 				count++;
 		}
 		if (count > 1)
@@ -18,7 +18,7 @@ static int	ft_check_horizontally(size_t i, int **board)
 	return (1);
 }
 
-static int	ft_check_vertically(size_t j, int **board)
+static int	ft_check_vertically(size_t j, t_cell **board)
 {
 	size_t count = 0;
 
@@ -27,7 +27,7 @@ static int	ft_check_vertically(size_t j, int **board)
 		count = 0;
 		for (size_t i = 0; i < 9; i++)
 		{
-			if (board[i][j] == target)
+			if (board[i][j].num == target)
 				count++;
 		}
 		if (count > 1)
@@ -36,7 +36,7 @@ static int	ft_check_vertically(size_t j, int **board)
 	return (1);
 }
 
-static int	ft_check_square(size_t i, size_t j, int **board)
+static int	ft_check_square(size_t i, size_t j, t_cell **board)
 {
 	int target;
 	size_t count;
@@ -57,7 +57,7 @@ static int	ft_check_square(size_t i, size_t j, int **board)
 			end_j = new_j + 3;
 			while (new_j < end_j)
 			{
-				if (board[new_i][new_j] == target)
+				if (board[new_i][new_j].num == target)
 					count++;
 				new_j++;
 			}
@@ -70,7 +70,7 @@ static int	ft_check_square(size_t i, size_t j, int **board)
 	return (1);
 }
 
-int			ft_check_cell(size_t i, size_t j, int **board)
+int			ft_check_cell(size_t i, size_t j, t_cell **board)
 {
 	if (!ft_check_vertically(j, board) || \
 !ft_check_horizontally(i, board) || !ft_check_square(i, j, board))
@@ -78,7 +78,7 @@ int			ft_check_cell(size_t i, size_t j, int **board)
 	return (1);
 }
 
-int			ft_check_all(int **board)
+int			ft_check_all(t_cell **board)
 {
 	for (size_t i = 0; i < 9; i++)
 	{

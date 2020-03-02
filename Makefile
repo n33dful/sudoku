@@ -1,5 +1,5 @@
 C=gcc 
-FLAGS=-Wall -Wextra -Werror -g
+FLAGS=-Wall -Wextra -Werror -O3
 FILES=ft_boardfuncs.c\
 ft_checkfuncs.c\
 ft_findfuncs.c\

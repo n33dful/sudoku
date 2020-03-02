@@ -1,58 +1,66 @@
 #include "sudoku.h"
 
-static void	ft_cell_fill(int i, int j, int **board, t_cell *cell)
+static int	ft_cell_fill(size_t i, size_t j, t_cell **board)
 {
-	cell->i = i;
-	cell->j = j;
-	cell->count_of_opts = 0;
-	for (int num = 1; num <= 9; num++)
-	{
-		board[i][j] = num;
-		if (ft_check_cell(i, j, board))
-			cell->opts[cell->count_of_opts++] = num;
-	}
-	board[i][j] = 0;
-}
-
-t_list		*ft_find_opts(int **board)
-{
-	t_list	*list = NULL;
 	t_list	*new = NULL;
-	t_cell	cell;
 
 	if (!board)
-		return (NULL);
+		return (0);
+	for (int num = 1; num <= 9; num++)
+	{
+		board[i][j].num = num;
+		if (ft_check_cell(i, j, board))
+		{
+			if (!(new = ft_lstnew(&num, sizeof(int))))
+				return (0);
+			ft_lstadd_back(&(board[i][j].opts), new);
+		}
+	}
+	board[i][j].num = 0;
+	return (1);
+}
+
+int			ft_find_opts(t_cell **board)
+{
+	if (!board)
+		return (0);
 	for (size_t i = 0; i < 9; i++)
 	{
 		for (size_t j = 0; j < 9; j++)
 		{
-			if (board[i][j] != 0)
+			if (board[i][j].num != 0)
 				continue;
-			ft_cell_fill(i, j, board, &cell);
-			if (!(new = ft_lstnew(&cell, sizeof(t_cell))))
-			{
-				ft_lstdel(&list, ft_celldel);
-				return (NULL);
-			}
-			ft_lstadd_back(&list, new);
+			if (!ft_cell_fill(i, j, board))
+				return (0);
 		}
 	}
-	return (list);
+	return (1);
 }
 
-int			ft_find_answer(int **board, t_list *list)
+int			ft_find_answer(t_cell **board)
 {
-	t_cell	*cell = NULL;
+	t_list	*list_of_opts;
 
-	if (!list)
-		return (1);
-	cell = list->content;
-	for (int i = 0; i < cell->count_of_opts; i++)
+	for (size_t i = 0; i < 9; i++)
 	{
-		board[cell->i][cell->j] = cell->opts[i];
-		if (ft_check_all(board) && ft_find_answer(board, list->next))
-			return (1);
+		for (size_t j = 0; j < 9; j++)
+		{
+			if (board[i][j].is_base || board[i][j].num != 0)
+				continue ;
+			list_of_opts = board[i][j].opts;
+			while (list_of_opts)
+			{
+				board[i][j].num = *((int *)list_of_opts->content);
+				if (!ft_check_all(board))
+					list_of_opts = list_of_opts->next;
+				else if (ft_find_answer(board))
+					return (1);
+				else
+					list_of_opts = list_of_opts->next;
+			}
+			board[i][j].num = 0;
+			return (0);
+		}
 	}
-	board[cell->i][cell->j] = 0;
-	return (0);
+	return (1);
 }
