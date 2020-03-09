@@ -1,13 +1,27 @@
-C=gcc 
-FLAGS=-Wall -Wextra -Werror -O3
-FILES=ft_boardfuncs.c\
-ft_checkfuncs.c\
-ft_findfuncs.c\
-ft_lstfuncs.c\
-main.c
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: cdarci <marvin@42.fr>                      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/02/06 16:10:12 by cdarci            #+#    #+#              #
+#    Updated: 2020/02/06 16:10:17 by cdarci           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+CC=gcc 
+CCFLAGS=-Wall -Wextra -Werror -O3
+DFLAGS=-MD
+FILES=main.c\
+check_sudoku.c\
+delete_sudoku.c\
+create_sudoku.c\
+display_sudoku.c\
+find_funcs.c
 DIR_S=src
 DIR_O=temp
-HEADER=incl
+DIR_H=incl
 NAME=sudoku
 SOURCES=$(addprefix $(DIR_S)/, $(FILES))
 OBJECTS=$(addprefix $(DIR_O)/, $(FILES:.c=.o))
@@ -15,11 +29,13 @@ OBJECTS=$(addprefix $(DIR_O)/, $(FILES:.c=.o))
 all : $(NAME)
 
 $(NAME): $(OBJECTS)
-	@$(C) $(FLAGS) $(OBJECTS) -o $(NAME)
+	@$(CC) $(OBJECTS) -o $(NAME)
 
 $(DIR_O)/%.o: $(DIR_S)/%.c
 	@mkdir -p $(DIR_O)
-	@$(C) $(FLAGS) -I$(HEADER) -c $< -o $@
+	@$(CC) $(DFLAGS) $(CCFLAGS) -I$(DIR_H) -c $< -o $@
+	
+-include $(OBJECTS:.o=.d)
 
 clean:
 	@rm -rf $(DIR_O)

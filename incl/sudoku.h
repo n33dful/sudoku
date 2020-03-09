@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sudoku.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cdarci <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/06 16:10:12 by cdarci            #+#    #+#             */
+/*   Updated: 2020/02/06 16:10:17 by cdarci           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SUDOKU_H
 # define SUDOKU_H
 
@@ -5,37 +17,34 @@
 # define ANSI_COLOR_RESET "\x1b[0m"
 
 # include <ctype.h>
+# include <errno.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <sys/types.h>
+# include <unistd.h>
 
-typedef struct		s_list
+typedef struct			s_options
 {
-	void			*content;
-	size_t			content_size;
-	struct s_list	*next;
-}					t_list;
+	int					number;
+	struct s_options	*next;
+}						t_options;
 
-typedef struct		s_cell
-{
-	int				num;
-	int				is_base;
-	t_list			*opts;
-}					t_cell;
+typedef struct			s_sudoku
+{	
+	int					number_in_the_cell;
+	int					initial_number;
+	struct s_options	*filling_options;
+}						t_sudoku;
 
-t_list				*ft_lstnew(void const *content, size_t content_size);
-void				ft_lstdel(t_list **alst, void (*del)(void *, size_t));
-void				ft_lstadd_back(t_list **alst, t_list *new);
+int			find_fill_options_for_each_cell(t_sudoku **sudoku);
+int			find_sudoku_solutions(t_sudoku **sudoku);
 
-int					ft_find_opts(t_cell **board);
-int					ft_find_answer(t_cell **board);
+int			check_cell_in_sudoku(size_t i, size_t j, t_sudoku **sudoku);
+int			check_the_input_sudoku(t_sudoku **sudoku);
 
-int					ft_check_cell(size_t i, size_t j, t_cell **board);
-int					ft_check_all(t_cell **board);
-
-void				ft_celldel(void *content, size_t content_size);
-void				ft_board_print(t_cell **board);
-void				ft_boarddel(t_cell ***board);
-t_cell				**ft_board_fill(int argc, char **argv);
+t_sudoku	**create_sudoku(int argc, char **argv);
+void		display_sudoku(size_t solution_number, t_sudoku **sudoku);
+void		delete_sudoku(t_sudoku ***sudoku);
 
 #endif

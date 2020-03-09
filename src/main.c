@@ -1,46 +1,46 @@
-#include "sudoku.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cdarci <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/06 16:10:12 by cdarci            #+#    #+#             */
+/*   Updated: 2020/02/06 16:10:17 by cdarci           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-/*
-** TODO:
-** 1. Add function to read from file (rea from argv already yet).
-** 2. Make refactoring.
-** 3. Сделать перекрестные ссылки по методу: перед цилом вайл когда
-** идет прогон возможных вариантов заранее подготовить его путем
-** перепроверки на чек_олл и удилить только те, которые уже не подходят
-** таким образом уменьшить количество итераций.
-*/
+#include "sudoku.h"
 
 /*
 ** Function to delete all allocated memory and exit
 */
-
-static void	ft_program_exit(int ex, t_cell ***board)
+static void	termination(int exit_code, char *message, t_sudoku ***sudoku)
 {
-	if (ex == EXIT_FAILURE)
-		printf("Error!\n");
-	else if (!(*board))
-		printf("Check README.txt\n");
-	ft_boarddel(board);
-	exit(ex);
+	if (message && !errno)
+		printf("%s\n", message);
+	else
+		printf("%s\n", strerror(errno));
+	delete_sudoku(sudoku);
+	exit(exit_code);
 }
 
 /*
-** Main function
+** Main Function
 */
-
 int			main(int argc, char **argv)
 {
-	t_cell	**board = NULL;
+	t_sudoku	**sudoku = NULL;
 
 	if (argc == 1)
-		ft_program_exit(EXIT_SUCCESS, &board);
-	else if (argc == 10 && !(board = ft_board_fill(argc, argv)))
-		ft_program_exit(EXIT_FAILURE, &board);
-	else if (!ft_find_opts(board))
-		ft_program_exit(EXIT_FAILURE, &board);
-	else if (!ft_find_answer(board))
-		ft_program_exit(EXIT_FAILURE, &board);
+		termination(EXIT_SUCCESS, "Check README.txt", &sudoku);
+	else if (!(sudoku = create_sudoku(argc, argv)))
+		termination(EXIT_FAILURE, "Invalid map!", &sudoku);
+	else if (!find_fill_options_for_each_cell(sudoku))
+		termination(EXIT_FAILURE, "Memory error!", &sudoku);
+	else if (find_sudoku_solutions(sudoku))
+		termination(EXIT_SUCCESS, "All solutions are found", &sudoku);
 	else
-		ft_board_print(board);
-	ft_program_exit(EXIT_SUCCESS, &board);
+		display_sudoku(0, sudoku);
+	termination(EXIT_SUCCESS, NULL, &sudoku);
 }
